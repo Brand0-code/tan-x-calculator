@@ -19,17 +19,28 @@ margin (button text is 11pt bold, which doesn't qualify as WCAG
 was darkened from `#4a7abc` to `#3a6aac` to clear the threshold
 without materially changing the color identity of the UI.
 
-## Explicit light theme (bg pinning)
+## Explicit light theme, forced via the ttk "clam" theme
 
 Before this pass, no widget set an explicit background color, so
 each one inherited whatever the OS theme provided. Under macOS Dark
 Mode specifically, Tkinter's classic (non-ttk) widgets don't
 automatically pair a dark background with light text — the result is
 hardcoded dark text (e.g. `fg="black"`) landing on a dark background,
-which is unreadable. Every widget now sets `bg=self.BG` (`"white"`)
-explicitly, so contrast is guaranteed regardless of the user's system
-theme, rather than being an accident of whatever theme happens to be
-active.
+which is unreadable.
+
+The first attempt at a fix set `bg`/`fg` explicitly on every classic
+`tk` widget. That turned out to be insufficient on macOS specifically:
+the native "aqua" `ttk`/`tk` theme silently **ignores** explicit
+color options on most widgets and substitutes the OS's own
+light/dark-mode colors regardless of what the code requests — so the
+hardcoded white background never actually rendered, while some text
+kept its (also OS-driven) color, landing back on a dark background.
+
+The actual fix: the GUI was rebuilt on `ttk` widgets with the
+**"clam"** theme forced via `ttk.Style().theme_use("clam")`. Unlike
+"aqua," "clam" is a pure-Tcl theme that draws every widget from the
+colors given to it, so the light theme now renders identically
+regardless of the OS's light/dark mode setting.
 
 ## Keyboard navigation
 
