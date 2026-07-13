@@ -7,3 +7,5 @@ venv/
 # LaTeX report/slides are submitted separately, not part of the code repo
 main.tex
 slide.tex
+main_d2.tex
+slide_d2.tex
