@@ -31,7 +31,6 @@ Functions replaced from D1 (which used the math module):
 
 class UndefinedTangentError(Exception):
     """Raised when tan(x) is undefined (x is an odd multiple of pi/2)."""
-    pass
 
 
 # Hardcoded constant: not a function call, so this does not use a
